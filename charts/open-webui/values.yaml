@@ -23,7 +23,7 @@ ollama:
 
 pipelines:
   # -- Automatically install Pipelines chart to extend Open WebUI functionality using Pipelines: https://github.com/open-webui/pipelines
-  enabled: true
+  enabled: false
   # -- This section can be used to pass required environment variables to your pipelines (e.g. Langfuse hostname)
   extraEnvVars: []
 
@@ -185,7 +185,7 @@ managedCertificate:
     - chat.example.com # update to your real domain
 
 ingress:
-  enabled: false
+  enabled: true
   class: ""
   # -- Use appropriate annotations for your Ingress controller, e.g., for NGINX:
   annotations: {}
@@ -198,7 +198,7 @@ ingress:
   #   nginx.ingress.kubernetes.io/permanent-redirect: "https://chat.example.com"
   #   networking.gke.io/managed-certificates: "mydomain-chat-cert"
   #   # nginx.ingress.kubernetes.io/rewrite-target: /
-  host: "chat.example.com" # update to your real domain
+  host: "llm3.stratocloud.eu" # update to your real domain
   additionalHosts: []
   tls: false
   existingSecret: ""
@@ -211,7 +211,7 @@ ingress:
 
 persistence:
   enabled: true
-  size: 2Gi
+  size: 3Gi
   # -- Use existingClaim if you want to re-use an existing Open WebUI PVC instead of creating a new one
   existingClaim: ""
   # -- Subdirectory of Open WebUI PVC to mount. Useful if root directory is not empty.
@@ -223,7 +223,7 @@ persistence:
   selector: {}
   annotations: {}
   # -- Sets the storage provider, availables values are `local`, `s3`, `gcs` or `azure`
-  provider: local
+  provider: longhorn
   s3:
     # -- Sets the access key ID for S3 storage
     # @section -- Amazon S3 Storage configuration
@@ -280,7 +280,8 @@ persistence:
     keyExistingSecretKey: ""
 
 # -- Node labels for pod assignment.
-nodeSelector: {}
+nodeSelector:
+  nvidia.com/gpu.count: '1'
 
 # -- Tolerations for pod assignment
 tolerations: []
